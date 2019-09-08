@@ -1,0 +1,27 @@
+{
+  "name": "appointments",
+  "version": "1.0.0",
+  "description": "Appointments system",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ivanbtrujillo/appointments-tdd.git"
+  },
+  "keywords": [
+    "appointments",
+    "tdd",
+    "react"
+  ],
+  "author": "Iván Bacallado Trujillo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ivanbtrujillo/appointments-tdd/issues"
+  },
+  "homepage": "https://github.com/ivanbtrujillo/appointments-tdd#readme",
+  "devDependencies": {
+    "jest": "^24.9.0"
+  }
+}
