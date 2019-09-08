@@ -4,12 +4,12 @@ const Appointment = ({
   customer: { firstName, lastName, phoneNumber, stylist, service, notes }
 }) => (
   <div>
-    <p>{firstName}</p>
-    <p>{lastName}</p>
-    <p>{phoneNumber}</p>
-    <p>{stylist}</p>
-    <p>{service}</p>
-    <p>{notes}</p>
+    <p data-testid="firstName">{firstName}</p>
+    <p data-testid="lastName">{lastName}</p>
+    <p data-testid="phoneNumber">{phoneNumber}</p>
+    <p data-testid="stylist">{stylist}</p>
+    <p data-testid="service">{service}</p>
+    <p data-testid="notes">{notes}</p>
   </div>
 );
 

@@ -1,18 +1,10 @@
 import React from "react";
-import ReactDOM from "react-dom";
-
+import { render } from "@testing-library/react";
+import "@testing-library/jest-dom/extend-expect";
 import Appointment from "./Appointment";
 
 describe("Appointment", () => {
-  let container;
-  let customer;
-
-  beforeEach(() => {
-    container = document.createElement("div");
-  });
-
-  const render = component => ReactDOM.render(component, container);
-  customer = {
+  const customer = {
     firstName: "Ashley",
     lastName: "Hamilton",
     phoneNumber: 666777888,
@@ -22,32 +14,32 @@ describe("Appointment", () => {
   };
 
   it("renders the customer firstName", () => {
-    render(<Appointment customer={customer} />);
-    expect(container.textContent).toMatch("Ashley");
+    const { getByTestId } = render(<Appointment customer={customer} />);
+    expect(getByTestId("firstName")).toHaveTextContent("Ashley");
   });
 
   it("renders customer lastName", () => {
-    render(<Appointment customer={customer} />);
-    expect(container.textContent).toMatch("Hamilton");
+    const { getByTestId } = render(<Appointment customer={customer} />);
+    expect(getByTestId("lastName")).toHaveTextContent("Hamilton");
   });
 
   it("renders phone number", () => {
-    render(<Appointment customer={customer} />);
-    expect(container.textContent).toMatch("666777888");
+    const { getByTestId } = render(<Appointment customer={customer} />);
+    expect(getByTestId("phoneNumber")).toHaveTextContent("666777888");
   });
 
   it("renders stylist", () => {
-    render(<Appointment customer={customer} />);
-    expect(container.textContent).toMatch("Ana White");
+    const { getByTestId } = render(<Appointment customer={customer} />);
+    expect(getByTestId("stylist")).toHaveTextContent("Ana White");
   });
 
   it("renders service", () => {
-    render(<Appointment customer={customer} />);
-    expect(container.textContent).toMatch("hair cut");
+    const { getByTestId } = render(<Appointment customer={customer} />);
+    expect(getByTestId("service")).toHaveTextContent("hair cut");
   });
 
   it("renders notes", () => {
-    render(<Appointment customer={customer} />);
-    expect(container.textContent).toMatch("will arrive 10 min later");
+    const { getByTestId } = render(<Appointment customer={customer} />);
+    expect(getByTestId("notes")).toHaveTextContent("will arrive 10 min later");
   });
 });
