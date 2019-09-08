@@ -31,7 +31,7 @@ describe("Appoinments Day View", () => {
 
   it("renders a message if there are not appointments", () => {
     render(<AppointmentsDayView appointments={[]} />);
-    expect(container.textContent).toEqual(
+    expect(container.textContent).toMatch(
       "There are no appointments scheduled for today."
     );
   });
