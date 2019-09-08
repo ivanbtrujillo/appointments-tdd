@@ -10,13 +10,16 @@ export const dateToHHMM = date => {
 const AppointmentsDayView = ({ appointments }) => {
   const [selectedAppointment, setSelectedAppointment] = useState(0);
   return (
-    <div id="appointmentsDayView">
-      <h1> Appointments </h1>
+    <div data-testid="appointmentsDayView">
+      <h1 data-testid="title"> Appointments </h1>
       {appointments.length ? (
         <div>
-          <ol>
+          <ol data-testid="appointments-list">
             {appointments.map((appointment, i) => (
-              <li key={appointment.startsAt}>
+              <li
+                key={appointment.startsAt}
+                data-testid="appointment-list-item"
+              >
                 <button type="button" onClick={() => setSelectedAppointment(i)}>
                   {dateToHHMM(appointment.startsAt)}
                 </button>
@@ -24,10 +27,14 @@ const AppointmentsDayView = ({ appointments }) => {
             ))}
           </ol>
           <h1>Selected appointment</h1>
-          <Appointment {...appointments[selectedAppointment]} />
+          <div data-testid="selected-appointment">
+            <Appointment {...appointments[selectedAppointment]} />
+          </div>
         </div>
       ) : (
-        <p>There are no appointments scheduled for today.</p>
+        <p data-testid="no-appointments-message">
+          There are no appointments scheduled for today.
+        </p>
       )}
     </div>
   );

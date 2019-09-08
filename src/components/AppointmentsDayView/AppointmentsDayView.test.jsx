@@ -1,11 +1,10 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import { render, fireEvent } from "@testing-library/react";
+import "@testing-library/jest-dom/extend-expect";
 import ReactTestUtils from "react-dom/test-utils";
 import AppointmentsDayView, { dateToHHMM } from "./AppointmentsDayView";
 
 describe("Appoinments Day View", () => {
-  let container;
-  let customer;
   const today = new Date();
   const appointments = [
     {
@@ -18,52 +17,63 @@ describe("Appoinments Day View", () => {
     }
   ];
 
-  beforeEach(() => {
-    container = document.createElement("div");
-  });
-
-  const render = component => ReactDOM.render(component, container);
-
   it("renders a div with the right id", () => {
-    render(<AppointmentsDayView appointments={[]} />);
-    expect(container.querySelector("div#appointmentsDayView")).not.toBeNull();
+    const { getByTestId } = render(<AppointmentsDayView appointments={[]} />);
+    expect(getByTestId("appointmentsDayView")).not.toBeNull();
   });
 
   it("renders a message if there are not appointments", () => {
-    render(<AppointmentsDayView appointments={[]} />);
-    expect(container.textContent).toMatch(
+    const { getByTestId } = render(<AppointmentsDayView appointments={[]} />);
+    expect(getByTestId("no-appointments-message")).toHaveTextContent(
       "There are no appointments scheduled for today."
     );
   });
 
   it("renders multiple appointments in an ol element", () => {
-    render(<AppointmentsDayView appointments={appointments} />);
-    expect(container.querySelector("ol")).not.toBeNull();
-    expect(container.querySelector("ol").children).toHaveLength(2);
+    const { getByTestId } = render(
+      <AppointmentsDayView appointments={appointments} />
+    );
+    expect(getByTestId("appointments-list")).not.toBeNull();
+    expect(getByTestId("appointments-list").children).toHaveLength(2);
   });
 
   it("renders each appointment in a li element with HH:MM date format", () => {
-    render(<AppointmentsDayView appointments={appointments} />);
-    expect(container.querySelectorAll("li")[0].textContent).toMatch("12:00");
-    expect(container.querySelectorAll("li")[1].textContent).toMatch("13:00");
+    const { queryAllByTestId } = render(
+      <AppointmentsDayView appointments={appointments} />
+    );
+    expect(queryAllByTestId("appointment-list-item")[0]).toHaveTextContent(
+      "12:00"
+    );
+    expect(queryAllByTestId("appointment-list-item")[1]).toHaveTextContent(
+      "13:00"
+    );
   });
 
   it("selects the first appointment by default", () => {
-    render(<AppointmentsDayView appointments={appointments} />);
-    expect(container.textContent).toMatch("Ashley");
+    const { getByTestId } = render(
+      <AppointmentsDayView appointments={appointments} />
+    );
+    expect(getByTestId("selected-appointment")).toHaveTextContent("Ashley");
   });
 
   it("has a button element in each li", () => {
-    render(<AppointmentsDayView appointments={appointments} />);
-    expect(container.querySelectorAll("li > button")).toHaveLength(2);
-    expect(container.querySelectorAll("li > button")[0].type).toEqual("button");
+    const { queryAllByTestId } = render(
+      <AppointmentsDayView appointments={appointments} />
+    );
+    expect(queryAllByTestId("appointment-list-item")).toHaveLength(2);
+    expect(
+      queryAllByTestId("appointment-list-item")[0].children[0].nodeName
+    ).toEqual("BUTTON");
   });
 
   it("renders another appointment when selected", () => {
-    render(<AppointmentsDayView appointments={appointments} />);
-    const button = container.querySelectorAll("button")[1];
-    ReactTestUtils.Simulate.click(button);
-    expect(container.textContent).toMatch("Jordan");
+    const { queryAllByTestId, getByTestId } = render(
+      <AppointmentsDayView appointments={appointments} />
+    );
+    expect(getByTestId("selected-appointment")).toHaveTextContent("Ashley");
+    const button = queryAllByTestId("appointment-list-item")[1].children[0];
+    fireEvent.click(button);
+    expect(getByTestId("selected-appointment")).toHaveTextContent("Jordan");
   });
 });
 
