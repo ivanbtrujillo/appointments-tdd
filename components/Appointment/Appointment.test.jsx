@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import Appointments from "./Appointments";
+import Appointment from "./Appointment";
 
 describe("Appointment", () => {
   let container;
@@ -15,13 +15,13 @@ describe("Appointment", () => {
 
   it("renders the customer first name", () => {
     customer = { firstName: "Ashley" };
-    render(<Appointments customer={customer} />);
+    render(<Appointment customer={customer} />);
     expect(container.textContent).toEqual("Ashley");
   });
 
   it("renders another customer first name", () => {
     customer = { firstName: "Jordan" };
-    render(<Appointments customer={customer} />);
+    render(<Appointment customer={customer} />);
     expect(container.textContent).toEqual("Jordan");
   });
 });
