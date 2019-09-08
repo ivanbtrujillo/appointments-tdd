@@ -4,7 +4,7 @@
   "description": "Appointments system",
   "main": "index.js",
   "scripts": {
-    "test": "jest --watchAll"
+    "test": "jest --watchAll --coverage --verbose"
   },
   "repository": {
     "type": "git",
