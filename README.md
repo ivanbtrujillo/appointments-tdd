@@ -22,3 +22,12 @@ Improve performance replacing the reference to duplicated functions in the outpu
 
 - @babel/runtime
 - @babel/plugin-transform-runtime
+
+.babelrc config:
+
+```
+{
+  "presets": ["@babel/env", "@babel/react"],
+  "plugins": ["@babel/transform-runtime"]
+}
+```
