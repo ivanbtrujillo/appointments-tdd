@@ -19,11 +19,11 @@ const ListItem = ({ appointment, selected, onClick }) => (
   <li
     key={appointment.startsAt}
     data-testid="appointment-list-item"
-    className={`m-4   text-white ${selected ? " border-b border-white" : ""}`}
+    className={`m-4 text-white ${selected ? "border-b border-white" : ""}`}
   >
     <button
       type="button"
-      className="w-full text-left outline-none"
+      className="w-full text-left focus:outline-none"
       onClick={onClick}
     >
       {dateToHHMM(appointment.startsAt)}
