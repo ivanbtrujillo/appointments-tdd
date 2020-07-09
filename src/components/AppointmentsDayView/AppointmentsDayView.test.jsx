@@ -1,8 +1,7 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
-import ReactTestUtils from "react-dom/test-utils";
-import AppointmentsDayView, { dateToHHMM } from "./AppointmentsDayView";
+import { AppointmentsDayView, dateToHHMM } from "./AppointmentsDayView";
 
 describe("Appoinments Day View", () => {
   const today = new Date();

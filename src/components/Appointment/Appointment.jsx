@@ -1,8 +1,9 @@
 import React from "react";
 
-const Appointment = ({
-  customer: { firstName, lastName, phoneNumber, stylist, service, notes }
+export const Appointment = ({
+  customer: { firstName, lastName, phoneNumber, stylist, service, notes },
 }) => (
+  <div className="p-4 text-white">
     <p>{firstName}</p>
     <p>{lastName}</p>
     <p>{phoneNumber}</p>
@@ -11,5 +12,3 @@ const Appointment = ({
     <p>{notes}</p>
   </div>
 );
-
-export default Appointment;
