@@ -11,6 +11,10 @@ const Title = ({ children }) => (
   <h1 className="font-bold text-white text-xl p-4">{children}</h1>
 );
 
+const List = ({ children }) => (
+  <ol data-testid="appointments-list">{children} </ol>
+);
+
 export const AppointmentsDayView = ({ appointments }) => {
   const [selectedAppointment, setSelectedAppointment] = useState(0);
   return (
@@ -19,7 +23,7 @@ export const AppointmentsDayView = ({ appointments }) => {
         <div className="flex flex-row h-full">
           <div className="flex flex-col w-1/6 bg-purple-400">
             <Title>Citas de hoy</Title>
-            <ol data-testid="appointments-list">
+            <List>
               {appointments.map((appointment, i) => (
                 <li
                   key={appointment.startsAt}
@@ -37,7 +41,7 @@ export const AppointmentsDayView = ({ appointments }) => {
                   </button>
                 </li>
               ))}
-            </ol>
+            </List>
           </div>
           <div className="h-full flex-1  bg-blue-500">
             <Title>Cita seleccionada</Title>
