@@ -7,6 +7,10 @@ export const dateToHHMM = date => {
   return `${h}:${m}`;
 };
 
+const Title = ({ children }) => (
+  <h1 className="font-bold text-white text-xl p-4">{children}</h1>
+);
+
 export const AppointmentsDayView = ({ appointments }) => {
   const [selectedAppointment, setSelectedAppointment] = useState(0);
   return (
@@ -14,12 +18,7 @@ export const AppointmentsDayView = ({ appointments }) => {
       {appointments.length ? (
         <div className="flex flex-row h-full">
           <div className="flex flex-col w-1/6 bg-purple-400">
-            <h1
-              data-testid="title"
-              className="font-bold text-white text-xl p-4"
-            >
-              Citas de hoy
-            </h1>
+            <Title>Citas de hoy</Title>
             <ol data-testid="appointments-list">
               {appointments.map((appointment, i) => (
                 <li
@@ -41,9 +40,7 @@ export const AppointmentsDayView = ({ appointments }) => {
             </ol>
           </div>
           <div className="h-full flex-1  bg-blue-500">
-            <h1 className="font-bold text-white text-xl p-4">
-              Cita seleccionada
-            </h1>
+            <Title>Cita seleccionada</Title>
             <div data-testid="selected-appointment">
               <Appointment {...appointments[selectedAppointment]} />
             </div>
