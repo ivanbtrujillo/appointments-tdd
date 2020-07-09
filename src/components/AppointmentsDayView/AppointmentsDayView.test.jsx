@@ -9,30 +9,32 @@ describe("Appoinments Day View", () => {
   const appointments = [
     {
       startsAt: today.setHours(12, 0),
-      customer: { firstName: "Ashley" }
+      customer: { firstName: "Ashley" },
     },
     {
       startsAt: today.setHours(13, 0),
-      customer: { firstName: "Jordan" }
-    }
+      customer: { firstName: "Jordan" },
+    },
   ];
 
   it("renders a div with the right id", () => {
     const { getByTestId } = render(<AppointmentsDayView appointments={[]} />);
+    expect(getByTestId("appointmentsDayView").nodeName).toBe("DIV");
     expect(getByTestId("appointmentsDayView")).not.toBeNull();
   });
 
   it("renders a message if there are not appointments", () => {
-    const { getByTestId } = render(<AppointmentsDayView appointments={[]} />);
-    expect(getByTestId("no-appointments-message")).toHaveTextContent(
-      "There are no appointments scheduled for today."
-    );
+    const { getByText } = render(<AppointmentsDayView appointments={[]} />);
+    expect(
+      getByText("There are no appointments scheduled for today.")
+    ).toBeInTheDocument();
   });
 
   it("renders multiple appointments in an ol element", () => {
     const { getByTestId } = render(
       <AppointmentsDayView appointments={appointments} />
     );
+    expect(getByTestId("appointments-list").nodeName).toBe("OL");
     expect(getByTestId("appointments-list")).not.toBeNull();
     expect(getByTestId("appointments-list").children).toHaveLength(2);
   });
@@ -41,9 +43,12 @@ describe("Appoinments Day View", () => {
     const { queryAllByTestId } = render(
       <AppointmentsDayView appointments={appointments} />
     );
+
+    expect(queryAllByTestId("appointment-list-item")[0].nodeName).toBe("LI");
     expect(queryAllByTestId("appointment-list-item")[0]).toHaveTextContent(
       "12:00"
     );
+    expect(queryAllByTestId("appointment-list-item")[1].nodeName).toBe("LI");
     expect(queryAllByTestId("appointment-list-item")[1]).toHaveTextContent(
       "13:00"
     );
@@ -61,8 +66,13 @@ describe("Appoinments Day View", () => {
       <AppointmentsDayView appointments={appointments} />
     );
     expect(queryAllByTestId("appointment-list-item")).toHaveLength(2);
+    expect(queryAllByTestId("appointment-list-item")[0].nodeName).toBe("LI");
+    expect(queryAllByTestId("appointment-list-item")[1].nodeName).toBe("LI");
     expect(
       queryAllByTestId("appointment-list-item")[0].children[0].nodeName
+    ).toEqual("BUTTON");
+    expect(
+      queryAllByTestId("appointment-list-item")[1].children[0].nodeName
     ).toEqual("BUTTON");
   });
 
