@@ -6,7 +6,7 @@
   "scripts": {
     "start": "webpack-dev-server --open --mode development",
     "test": "jest --watchAll --coverage --verbose",
-    "build": "webpack --mode production"
+    "build": "env NODE_ENV=production webpack --mode production"
   },
   "repository": {
     "type": "git",
