@@ -5,7 +5,14 @@ const at = hours => today.setHours(hours, 0);
 export const mockAppointments = [
   {
     startsAt: at(9),
-    customer: { firstName: "Charlie" }
+    customer: {
+      firstName: "Charlie",
+      lastName: "Johnson",
+      service: "hair cut",
+      stylist: "Ana White",
+      phoneNumber: 666888555,
+      notes: "Vip"
+    }
   },
   {
     startsAt: at(10),
