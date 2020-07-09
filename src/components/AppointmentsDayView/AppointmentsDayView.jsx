@@ -15,6 +15,22 @@ const List = ({ children }) => (
   <ol data-testid="appointments-list">{children} </ol>
 );
 
+const ListItem = ({ appointment, selected, onClick }) => (
+  <li
+    key={appointment.startsAt}
+    data-testid="appointment-list-item"
+    className={`m-4   text-white ${selected ? " border-b border-white" : ""}`}
+  >
+    <button
+      type="button"
+      className="w-full text-left outline-none"
+      onClick={onClick}
+    >
+      {dateToHHMM(appointment.startsAt)}
+    </button>
+  </li>
+);
+
 export const AppointmentsDayView = ({ appointments }) => {
   const [selectedAppointment, setSelectedAppointment] = useState(0);
   return (
@@ -25,21 +41,12 @@ export const AppointmentsDayView = ({ appointments }) => {
             <Title>Citas de hoy</Title>
             <List>
               {appointments.map((appointment, i) => (
-                <li
+                <ListItem
                   key={appointment.startsAt}
-                  data-testid="appointment-list-item"
-                  className={`m-4   text-white ${
-                    i === selectedAppointment ? " border-b border-white" : ""
-                  }`}
-                >
-                  <button
-                    type="button"
-                    className="w-full text-left outline-none"
-                    onClick={() => setSelectedAppointment(i)}
-                  >
-                    {dateToHHMM(appointment.startsAt)}
-                  </button>
-                </li>
+                  appointment={appointment}
+                  selected={i === selectedAppointment}
+                  onClick={() => setSelectedAppointment(i)}
+                />
               ))}
             </List>
           </div>
