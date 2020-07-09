@@ -10,36 +10,36 @@ describe("Appointment", () => {
     phoneNumber: 666777888,
     stylist: "Ana White",
     service: "hair cut",
-    notes: "will arrive 10 min later"
+    notes: "will arrive 10 min later",
   };
 
   it("renders the customer firstName", () => {
-    const { getByTestId } = render(<Appointment customer={customer} />);
-    expect(getByTestId("firstName")).toHaveTextContent("Ashley");
+    const { getByText } = render(<Appointment customer={customer} />);
+    expect(getByText("Ashley")).toBeInTheDocument();
   });
 
   it("renders customer lastName", () => {
-    const { getByTestId } = render(<Appointment customer={customer} />);
-    expect(getByTestId("lastName")).toHaveTextContent("Hamilton");
+    const { getByText } = render(<Appointment customer={customer} />);
+    expect(getByText("Hamilton")).toBeInTheDocument();
   });
 
   it("renders phone number", () => {
-    const { getByTestId } = render(<Appointment customer={customer} />);
-    expect(getByTestId("phoneNumber")).toHaveTextContent("666777888");
+    const { getByText } = render(<Appointment customer={customer} />);
+    expect(getByText("666777888")).toBeInTheDocument();
   });
 
   it("renders stylist", () => {
-    const { getByTestId } = render(<Appointment customer={customer} />);
-    expect(getByTestId("stylist")).toHaveTextContent("Ana White");
+    const { getByText } = render(<Appointment customer={customer} />);
+    expect(getByText("Ana White")).toBeInTheDocument();
   });
 
   it("renders service", () => {
-    const { getByTestId } = render(<Appointment customer={customer} />);
-    expect(getByTestId("service")).toHaveTextContent("hair cut");
+    const { getByText } = render(<Appointment customer={customer} />);
+    expect(getByText("hair cut")).toBeInTheDocument();
   });
 
   it("renders notes", () => {
-    const { getByTestId } = render(<Appointment customer={customer} />);
-    expect(getByTestId("notes")).toHaveTextContent("will arrive 10 min later");
+    const { getByText } = render(<Appointment customer={customer} />);
+    expect(getByText("will arrive 10 min later")).toBeInTheDocument();
   });
 });
