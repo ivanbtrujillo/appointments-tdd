@@ -1,5 +1,7 @@
 # Appointments system using TDD
 
+A project created using a TDD approach and following Mastering React Test-Driven Development book
+
 ## Dependencies
 
 ### Jest
