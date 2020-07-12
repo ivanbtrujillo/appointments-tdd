@@ -1,12 +1,18 @@
 import React from "react";
-import { render, fireEvent } from "@testing-library/react";
+import { render, fireEvent, getByLabelText } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
 import { CustomerForm } from "./CustomerForm";
+import { debug } from "webpack";
 
 const expectToBeInputFieldOfTypeText = (formElement) => {
   expect(formElement.nodeName).not.toBeNull();
   expect(formElement.nodeName).toBe("INPUT");
   expect(formElement.type).toBe("text");
+};
+
+const expectToBeSelectBox = (formElement) => {
+  expect(formElement.nodeName).not.toBeNull();
+  expect(formElement.nodeName).toBe("SELECT");
 };
 
 const itRendersAsATextInput = (placeholderText) => {
@@ -17,11 +23,18 @@ const itRendersAsATextInput = (placeholderText) => {
   });
 };
 
+const itRendersAsSelectBox = (placeholderText) => {
+  it("renders a text input", () => {
+    const { getByPlaceholderText } = render(<CustomerForm />);
+    const select = getByPlaceholderText(placeholderText);
+    expectToBeSelectBox(select);
+  });
+};
+
 const itIncludesTheExistingValue = ({ fieldName, placeholderText }) => {
   it("includes the existing value", () => {
     const { getByPlaceholderText } = render(<CustomerForm {...{ [fieldName]: "value" }} />);
     const input = getByPlaceholderText(placeholderText);
-    expectToBeInputFieldOfTypeText(input);
     expect(input.value).toBe("value");
   });
 };
@@ -34,7 +47,6 @@ const itRendersALabelForIt = ({ fieldName, labelText }) => {
     const input = getByLabelText(labelText);
     expect(label).not.toBeNull();
     expect(label.nodeName).toBe("LABEL");
-    expectToBeInputFieldOfTypeText(input);
     expect(input.value).toBe("value");
   });
 };
@@ -46,7 +58,7 @@ const itSavesItWhenSubmitted = ({ fieldName }) => {
     fireEvent.submit(getByTestId("customer-form"));
     expect(onSubmitFn).toHaveBeenCalled();
     expect(onSubmitFn).toHaveBeenCalledTimes(1);
-    expect(onSubmitFn).toHaveBeenCalledWith({ [fieldName]: "value" });
+    expect(onSubmitFn).toHaveBeenCalledWith(expect.objectContaining({ [fieldName]: "value" }));
   });
 };
 
@@ -63,7 +75,7 @@ const itSavesNewValueWhenChanged = ({ fieldName, placeholderText }) => {
     fireEvent.submit(getByTestId("customer-form"));
     expect(onSubmitFn).toHaveBeenCalled();
     expect(onSubmitFn).toHaveBeenCalledTimes(1);
-    expect(onSubmitFn).toHaveBeenCalledWith({ [fieldName]: "value2" });
+    expect(onSubmitFn).toHaveBeenCalledWith(expect.objectContaining({ [fieldName]: "value2" }));
   });
 };
 
@@ -80,11 +92,11 @@ describe("<CustomerForm />", () => {
   });
 
   describe("first name field", () => {
-    itRendersAsATextInput("First name");
+    itRendersAsATextInput("Write your first name");
 
     itIncludesTheExistingValue({
       fieldName: "firstName",
-      placeholderText: "First name",
+      placeholderText: "Write your first name",
     });
 
     itRendersALabelForIt({
@@ -96,16 +108,16 @@ describe("<CustomerForm />", () => {
 
     itSavesNewValueWhenChanged({
       fieldName: "firstName",
-      placeholderText: "First name",
+      placeholderText: "Write your first name",
     });
   });
 
   describe("last name field", () => {
-    itRendersAsATextInput("Last name");
+    itRendersAsATextInput("Write your last name");
 
     itIncludesTheExistingValue({
       fieldName: "lastName",
-      placeholderText: "Last name",
+      placeholderText: "Write your last name",
     });
 
     itRendersALabelForIt({
@@ -117,16 +129,16 @@ describe("<CustomerForm />", () => {
 
     itSavesNewValueWhenChanged({
       fieldName: "lastName",
-      placeholderText: "Last name",
+      placeholderText: "Write your last name",
     });
   });
 
   describe("phone field", () => {
-    itRendersAsATextInput("Phone");
+    itRendersAsATextInput("Write your phone");
 
     itIncludesTheExistingValue({
       fieldName: "phone",
-      placeholderText: "Phone",
+      placeholderText: "Write your phone",
     });
 
     itRendersALabelForIt({
@@ -138,16 +150,16 @@ describe("<CustomerForm />", () => {
 
     itSavesNewValueWhenChanged({
       fieldName: "phone",
-      placeholderText: "Phone",
+      placeholderText: "Write your phone",
     });
   });
 
   describe("stylist field", () => {
-    itRendersAsATextInput("Stylist");
+    itRendersAsATextInput("Your stylist name");
 
     itIncludesTheExistingValue({
       fieldName: "stylist",
-      placeholderText: "Stylist",
+      placeholderText: "Your stylist name",
     });
 
     itRendersALabelForIt({
@@ -159,37 +171,79 @@ describe("<CustomerForm />", () => {
 
     itSavesNewValueWhenChanged({
       fieldName: "stylist",
-      placeholderText: "Stylist",
+      placeholderText: "Your stylist name",
     });
   });
 
   describe("service field", () => {
-    itRendersAsATextInput("Service");
+    itRendersAsSelectBox("Service");
 
-    itIncludesTheExistingValue({
-      fieldName: "service",
-      placeholderText: "Service",
+    it("initially has the 'Cut' value choosen", () => {
+      const { getByPlaceholderText } = render(<CustomerForm />);
+      const select = getByPlaceholderText("Service");
+      expect(select.firstChild.value).toBe("Cut");
+      expect(select.firstChild.selected).toBeTruthy();
+      expect(select.firstChild.nodeName).toBe("OPTION");
     });
 
-    itRendersALabelForIt({
-      fieldName: "service",
-      labelText: "Service",
+    it("lists all saloon services", () => {
+      const selectableServices = ["Cut", "Blow-dry", "Cut & color", "Beard trim", "Cut & beard trim", "Extensions"];
+      const { getByPlaceholderText } = render(<CustomerForm selectableServices={selectableServices} />);
+      const select = getByPlaceholderText("Service");
+      const options = Array.from(select.childNodes);
+
+      const renderedOptions = options.map((node) => node.value);
+      expect(renderedOptions).toEqual(selectableServices);
     });
 
-    itSavesItWhenSubmitted({ fieldName: "service" });
+    it("preselects the exiting value", () => {
+      const selectableServices = ["Cut", "Blow-dry", "Cut & color", "Beard trim", "Cut & beard trim", "Extensions"];
+      const { getByPlaceholderText } = render(
+        <CustomerForm selectableServices={selectableServices} service={selectableServices[2]} />
+      );
+      const select = getByPlaceholderText("Service");
+      expect(select.value).toBe(selectableServices[2]);
+    });
 
-    itSavesNewValueWhenChanged({
-      fieldName: "service",
-      placeholderText: "Service",
+    it("renders a label for it", () => {
+      const { getByText } = render(<CustomerForm />);
+      const label = getByText("Service");
+      expect(label).not.toBeNull();
+      expect(label.nodeName).toBe("LABEL");
+    });
+
+    it("saves the existing value when submitted", () => {
+      const onSubmitFn = jest.fn();
+      const { getByTestId } = render(<CustomerForm onSubmit={onSubmitFn} />);
+      const customerForm = getByTestId("customer-form");
+      fireEvent.submit(customerForm);
+      expect(onSubmitFn).toHaveBeenCalled();
+      expect(onSubmitFn).toHaveBeenCalledTimes(1);
+      expect(onSubmitFn).toHaveBeenCalledWith({ service: "Cut" });
+    });
+
+    it("saves new value when changed", () => {
+      const selectableServices = ["Cut", "Blow-dry", "Cut & color", "Beard trim", "Cut & beard trim", "Extensions"];
+      const onSubmitFn = jest.fn();
+      const { getByTestId, getByPlaceholderText } = render(
+        <CustomerForm selectableServices={selectableServices} onSubmit={onSubmitFn} />
+      );
+      const select = getByPlaceholderText("Service");
+      const customerForm = getByTestId("customer-form");
+      fireEvent.change(select, { target: { value: selectableServices[3] } });
+      fireEvent.submit(customerForm);
+      expect(onSubmitFn).toHaveBeenCalled();
+      expect(onSubmitFn).toHaveBeenCalledTimes(1);
+      expect(onSubmitFn).toHaveBeenCalledWith({ service: selectableServices[3] });
     });
   });
 
   describe("notes field", () => {
-    itRendersAsATextInput("Notes");
+    itRendersAsATextInput("Aditional notes");
 
     itIncludesTheExistingValue({
       fieldName: "notes",
-      placeholderText: "Notes",
+      placeholderText: "Aditional notes",
     });
 
     itRendersALabelForIt({
@@ -201,7 +255,7 @@ describe("<CustomerForm />", () => {
 
     itSavesNewValueWhenChanged({
       fieldName: "notes",
-      placeholderText: "Notes",
+      placeholderText: "Aditional notes",
     });
   });
 });

@@ -1,19 +1,48 @@
 import React, { useState } from "react";
 
+const FormElement = ({ children }) => <div className="my-2 flex flex-col">{children}</div>;
+
 const Field = ({ id, label, placeholder, value, onChange }) => (
-  <>
+  <FormElement>
     <label htmlFor={id}>{label}</label>
-    <input id={id} placeholder={placeholder} type="text" value={value} onChange={onChange}></input>
-  </>
+    <input
+      className="border border-1 border-gray-600 rounded-sm p-1 mt-1 h-8"
+      id={id}
+      placeholder={placeholder}
+      type="text"
+      value={value}
+      onChange={onChange}
+    ></input>
+  </FormElement>
 );
 
-export const CustomerForm = ({ firstName, lastName, phone, stylist, service, notes, onSubmit }) => {
+const Dropdown = ({ id, label, name, selected, options, placeholder, onChange }) => (
+  <FormElement>
+    <label htmlFor={id}>{label}</label>
+    <select
+      className="border border-1 border-gray-600 rounded-sm p-1 mt-1 h-8"
+      id={id}
+      name={name}
+      placeholder={placeholder}
+      onChange={onChange}
+      value={selected}
+    >
+      {options.map((option) => (
+        <option key={option} value={option}>
+          {option}
+        </option>
+      ))}
+    </select>
+  </FormElement>
+);
+
+export const CustomerForm = ({ firstName, lastName, phone, stylist, service, notes, selectableServices, onSubmit }) => {
   const [customer, setCustomer] = useState({
     firstName,
     lastName,
     phone,
     stylist,
-    service,
+    service: selectableServices[0],
     notes,
   });
 
@@ -24,11 +53,11 @@ export const CustomerForm = ({ firstName, lastName, phone, stylist, service, not
   };
 
   return (
-    <form data-testid="customer-form" onSubmit={handleOnSubmit}>
+    <form data-testid="customer-form" className="flex flex-col" onSubmit={handleOnSubmit}>
       <Field
         id="firstName"
         label="First Name"
-        placeholder="First name"
+        placeholder="Write your first name"
         value={firstName}
         onChange={(e) => handleOnFieldChange({ fieldName: "firstName", e })}
       />
@@ -36,14 +65,14 @@ export const CustomerForm = ({ firstName, lastName, phone, stylist, service, not
       <Field
         id="lastName"
         label="Last Name"
-        placeholder="Last name"
+        placeholder="Write your last name"
         value={lastName}
         onChange={(e) => handleOnFieldChange({ fieldName: "lastName", e })}
       />
       <Field
         id="phone"
         label="Phone"
-        placeholder="Phone"
+        placeholder="Write your phone"
         value={phone}
         onChange={(e) => handleOnFieldChange({ fieldName: "phone", e })}
       />
@@ -51,27 +80,33 @@ export const CustomerForm = ({ firstName, lastName, phone, stylist, service, not
       <Field
         id="stylist"
         label="Stylist"
-        placeholder="Stylist"
+        placeholder="Your stylist name"
         value={stylist}
         onChange={(e) => handleOnFieldChange({ fieldName: "stylist", e })}
       />
 
-      <Field
+      <Dropdown
         id="service"
         label="Service"
+        name="service"
         placeholder="Service"
-        value={service}
+        selected={service}
+        options={selectableServices}
         onChange={(e) => handleOnFieldChange({ fieldName: "service", e })}
       />
 
       <Field
         id="notes"
         label="Notes"
-        placeholder="Notes"
+        placeholder="Aditional notes"
         value={notes}
         onChange={(e) => handleOnFieldChange({ fieldName: "notes", e })}
       />
       <input data-testid="submit" type="submit" value="Add" />
     </form>
   );
+};
+
+CustomerForm.defaultProps = {
+  selectableServices: ["Cut", "Blow-dry", "Cut & color", "Beard trim", "Cut & beard trim", "Extensions"],
 };
