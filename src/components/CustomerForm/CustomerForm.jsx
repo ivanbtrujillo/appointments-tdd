@@ -53,7 +53,7 @@ export const CustomerForm = ({ firstName, lastName, phone, stylist, service, not
   };
 
   return (
-    <form data-testid="customer-form" className="flex flex-col" onSubmit={handleOnSubmit}>
+    <form data-testid="customer-form" className="flex flex-col w-1/2" onSubmit={handleOnSubmit}>
       <Field
         id="firstName"
         label="First Name"
