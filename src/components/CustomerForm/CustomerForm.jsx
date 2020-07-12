@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import { BookingCalendar } from "../BookingCalendar/BookingCalendar.jsx";
 const FormElement = ({ children }) => <div className="my-2 flex flex-col">{children}</div>;
 
 const Field = ({ id, label, placeholder, value, onChange }) => (
@@ -102,6 +102,7 @@ export const CustomerForm = ({ firstName, lastName, phone, stylist, service, not
         value={notes}
         onChange={(e) => handleOnFieldChange({ fieldName: "notes", e })}
       />
+      <BookingCalendar />
       <input data-testid="submit" type="submit" value="Add" />
     </form>
   );
